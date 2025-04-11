@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
+import { PROXY } from './config/global.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -14,9 +15,10 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
   const configService = app.get(ConfigService);
+  const proxy = configService.get(PROXY);
   const logger = new Logger('Bootstrap');
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix(proxy);
 
   const config = new DocumentBuilder()
     .setTitle('Kochka API')
@@ -24,7 +26,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, documentFactory);
+  SwaggerModule.setup(`${proxy}/docs`, app, documentFactory);
 
   const port = configService.get('port');
   await app.listen(port, () => {

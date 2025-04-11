@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  username     String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions Session[]
+
+  @@map("user")
+}
+
+model Exercise {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  trainings TrainingExercise[]
+
+  @@map("exercise")
+}
+
+model Training {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  exercises TrainingExercise[]
+  sessions  Session[]
+
+  @@map("training")
+}
+
+model TrainingExercise {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  trainingId String   @db.ObjectId
+  exerciseId String   @db.ObjectId
+  sets       Int
+  repeats    Int
+  position   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  training Training @relation(fields: [trainingId], references: [id])
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
+
+  @@unique([trainingId, exerciseId])
+  @@map("trainingExercise")
+}
+
+model Session {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String    @db.ObjectId
+  trainingId String    @db.ObjectId
+  startedAt  DateTime  @default(now())
+  finishAt   DateTime?
+
+  user     User     @relation(fields: [userId], references: [id])
+  training Training @relation(fields: [trainingId], references: [id])
+
+  exercises SessionEexercise[]
+
+  @@map("session")
+}
+
+model SessionEexercise {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId String   @db.ObjectId
+  set       Float
+  weight    Float?
+  repeats   Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  session Session @relation(fields: [sessionId], references: [id])
+
+  @@map("sessionExercise")
+}
