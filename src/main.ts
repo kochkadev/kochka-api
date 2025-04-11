@@ -6,8 +6,8 @@ import {
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
-import { PROXY } from './config/global.config';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { PORT, PROXY } from './config/global.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -28,7 +28,9 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(`${proxy}/docs`, app, documentFactory);
 
-  const port = configService.get('port');
+  app.useGlobalPipes(new ValidationPipe());
+
+  const port = configService.get(PORT);
   await app.listen(port, () => {
     logger.log(`App has started on port ${port}.`);
   });

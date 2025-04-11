@@ -5,6 +5,7 @@ export const HTTP_TIMEOUT = 'HTTP_TIMEOUT';
 export const HTTP_MAX_REDIRECTS = 'HTTP_MAX_REDIRECTS';
 export const FRONTEND_DOMAIN = 'FRONTEND_DOMAIN';
 export const PROTOCOL_STR = 'PROTOCOL_STR';
+export const SALT_ROUNDS = 'SALT_ROUNDS';
 
 export const FILE_UPLOAD_DESTINATION = './static';
 
@@ -16,4 +17,5 @@ export default () => ({
   [HTTP_MAX_REDIRECTS]: Number(process.env[HTTP_MAX_REDIRECTS]) || 5,
   [FRONTEND_DOMAIN]: process.env[FRONTEND_DOMAIN] || 'localhost',
   [PROTOCOL_STR]: process.env[PROTOCOL_STR] || 'http',
+  [SALT_ROUNDS]: Number(process.env[SALT_ROUNDS]) || 10,
 });
