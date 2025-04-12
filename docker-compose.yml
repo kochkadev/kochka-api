@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  kochka-api:
+    build:
+      context: .
+      args:
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+    container_name: kochka-api
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@kochka-mongo:27017/${MONGO_DB}?authSource=admin
+    depends_on:
+      - kochka-mongo
+    restart: unless-stopped
+
+  kochka-mongo:
+    image: mongo:6
+    container_name: kochka-mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+    volumes:
+      - kochka_mongo_data:/data/db
+    restart: always
+
+volumes:
+  kochka_mongo_data:
