@@ -2,6 +2,9 @@ version: '3.9'
 
 services:
   kochka-api:
+    env_file:
+      - path: ./.env
+        required: true
     build:
       context: .
       args:
@@ -9,15 +12,16 @@ services:
     container_name: kochka-api
     ports:
       - 3000:3000
-    env_file:
-      - .env
     environment:
-      - DATABASE_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@kochka-mongo:27017/${MONGO_DB}?authSource=admin
+      DATABASE_URL: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@kochka-mongo:27017/${MONGO_DB}?connectTimeoutMS=5000&authSource=admin
     depends_on:
       - kochka-mongo
     restart: unless-stopped
 
   kochka-mongo:
+    env_file:
+      - path: ./.env
+        required: true
     image: mongo:6
     container_name: kochka-mongo
     ports:
