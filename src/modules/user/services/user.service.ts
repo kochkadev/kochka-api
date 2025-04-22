@@ -11,9 +11,9 @@ import {
 } from '../../../constants/errors';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { SALT_ROUNDS } from '../../../config/global.config';
 import { SafeUser } from '../../../types/safe-user.type';
 import { CreateUserData } from '../types/create-user-data.type';
+import { SALT_ROUNDS } from '../../../config/auth.config';
 
 @Injectable()
 export class UserService {
@@ -22,10 +22,9 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
 
-  async createUser(dto: CreateUserData): Promise<SafeUser> {
-    const { password, ...loginData } = dto;
+  async createUser(data: Prisma.UserUncheckedCreateInput): Promise<SafeUser> {
+    const { passwordHash, ...loginData } = data;
     await this.throwErrorIfUserExist(loginData);
-    const passwordHash = await this.hash(password);
     return this.prisma.user.create({
       data: { ...loginData, passwordHash },
       omit: { passwordHash: true },
@@ -59,5 +58,13 @@ export class UserService {
       throw new NotFoundException(USER_NOT_FOUND_ERROR);
     }
     return user;
+  }
+
+  async update(id: string, data: Prisma.UserUncheckedUpdateInput) {
+    return this.prisma.user.update({ where: { id }, data });
+  }
+
+  async clearRefreshHash(id: string) {
+    return this.update(id, { refreshTokenHash: null });
   }
 }

@@ -14,15 +14,22 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  username     String
-  passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  username         String   @unique
+  passwordHash     String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  role             UserRole @default(user)
+  refreshTokenHash String?
 
   sessions Session[]
 
   @@map("user")
+}
+
+enum UserRole {
+  user
+  admin
 }
 
 model Exercise {
