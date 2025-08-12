@@ -35,7 +35,7 @@ export class ExerciseController {
   @ApiOperation({ summary: 'Edit an exercise' })
   @ApiOkResponse({ type: ExerciseResponse })
   async update(
-    @Param() id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateExerciseRequest,
   ): Promise<ExerciseResponse> {
     return this.exerciseService.update(id, dto);
@@ -44,7 +44,7 @@ export class ExerciseController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete an exercise' })
   @ApiOkResponse({ description: 'Success' })
-  async delete(@Param() id: string): Promise<void> {
+  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.exerciseService.delete(id);
   }
 
