@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import authConfig from './config/auth.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
+import { ExerciseModule } from './modules/exercise/exercise.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
     }),
     DatabaseModule,
     UserModule,
+    ExerciseModule,
   ],
-  providers: [JwtStrategy, RefreshJwtStrategy]
+  providers: [JwtStrategy, RefreshJwtStrategy],
 })
 export class AppModule {}

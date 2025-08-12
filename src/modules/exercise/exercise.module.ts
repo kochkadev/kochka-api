@@ -6,4 +6,4 @@ import { ExerciseController } from './controllers/exercise.controller';
   controllers: [ExerciseController],
   providers: [ExerciseService],
 })
-export class ExerciesModule {}
+export class ExerciseModule {}
