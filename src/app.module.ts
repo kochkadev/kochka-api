@@ -7,6 +7,7 @@ import authConfig from './config/auth.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
 import { ExerciseModule } from './modules/exercise/exercise.module';
+import { TrainingModule } from './modules/training/training.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ExerciseModule } from './modules/exercise/exercise.module';
     DatabaseModule,
     UserModule,
     ExerciseModule,
+    TrainingModule,
   ],
   providers: [JwtStrategy, RefreshJwtStrategy],
 })
