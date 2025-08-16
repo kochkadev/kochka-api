@@ -1,7 +1,6 @@
 import { PrismaService } from '@database';
 import {
   ICreateTrainingRequest,
-  ITrainingResponse,
   IUpdateTrainingRequest,
 } from '@kochkadev/kochka-contracts';
 import { Injectable } from '@nestjs/common';
@@ -18,7 +17,7 @@ export class TrainingService {
     return this.prisma.training.update({ where: { id }, data });
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     await this.prisma.training.delete({ where: { id } });
   }
 
@@ -26,15 +25,23 @@ export class TrainingService {
     return this.prisma.training.findMany();
   }
 
-  async getTrainingResponse(id: string): Promise<ITrainingResponse> {
-    const { exercises, ...training } =
-      await this.prisma.training.findFirstOrThrow({
-        where: { id },
-        include: { exercises: { include: { exercise: true } } },
-      });
-    return {
-      ...training,
-      exercises: exercises.map(({ exercise }) => exercise),
-    };
+  async getTrainingResponse(id: string) {
+    return this.prisma.training.findFirstOrThrow({
+      where: { id },
+      include: {
+        exercises: {
+          omit: {
+            id: true,
+            trainingId: true,
+            exerciseId: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          include: {
+            exercise: { omit: { createdAt: true, updatedAt: true } },
+          },
+        },
+      },
+    });
   }
 }
