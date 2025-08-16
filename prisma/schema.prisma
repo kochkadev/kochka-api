@@ -84,12 +84,12 @@ model Session {
   user     User     @relation(fields: [userId], references: [id])
   training Training @relation(fields: [trainingId], references: [id])
 
-  exercises SessionEexercise[]
+  exercises SessionExercise[]
 
   @@map("session")
 }
 
-model SessionEexercise {
+model SessionExercise {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionId String   @db.ObjectId
   set       Float

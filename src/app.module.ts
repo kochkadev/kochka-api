@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
 import { ExerciseModule } from './modules/exercise/exercise.module';
 import { TrainingModule } from './modules/training/training.module';
+import { SessionModule } from './modules/session/session.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TrainingModule } from './modules/training/training.module';
     UserModule,
     ExerciseModule,
     TrainingModule,
+    SessionModule,
   ],
   providers: [JwtStrategy, RefreshJwtStrategy],
 })
