@@ -15,7 +15,12 @@ export class SessionService {
     return this.prisma.session.create({
       data: { userId, trainingId },
       omit: { trainingId: true },
-      include: { training: { select: { id: true, title: true } } },
+      include: {
+        training: { select: { id: true, title: true } },
+        exercises: {
+          omit: { sessionId: true, createdAt: true, updatedAt: true },
+        },
+      },
     });
   }
 
@@ -24,7 +29,12 @@ export class SessionService {
       where: { userId, trainingId },
       orderBy: { startedAt: 'desc' },
       omit: { trainingId: true },
-      include: { training: { select: { id: true, title: true } } },
+      include: {
+        training: { select: { id: true, title: true } },
+        exercises: {
+          omit: { sessionId: true, createdAt: true, updatedAt: true },
+        },
+      },
     });
   }
 
@@ -33,7 +43,12 @@ export class SessionService {
       where: { userId, trainingId },
       orderBy: { startedAt: 'desc' },
       omit: { trainingId: true },
-      include: { training: { select: { id: true, title: true } } },
+      include: {
+        training: { select: { id: true, title: true } },
+        exercises: {
+          omit: { sessionId: true, createdAt: true, updatedAt: true },
+        },
+      },
     });
   }
 }

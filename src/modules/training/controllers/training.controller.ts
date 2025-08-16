@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -37,7 +36,7 @@ export class TrainingController {
   @ApiOperation({ summary: 'Edit a training' })
   @ApiOkResponse({ type: TrainingResponse })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
     @Body() dto: UpdateTrainingRequest,
   ): Promise<TrainingResponse> {
     const entity = await this.trainingService.update(id, dto);
@@ -47,7 +46,7 @@ export class TrainingController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a training' })
   @ApiOkResponse({ description: 'Success' })
-  async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+  async delete(@Param('id') id: string): Promise<void> {
     return this.trainingService.delete(id);
   }
 
@@ -62,7 +61,7 @@ export class TrainingController {
   @ApiOperation({ summary: 'Get a training with exercises by ID' })
   @ApiOkResponse({ type: TrainingResponse })
   async getByid(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
   ): Promise<TrainingResponse> {
     return this.trainingService.getTrainingResponse(id);
   }

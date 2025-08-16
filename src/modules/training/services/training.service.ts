@@ -31,7 +31,6 @@ export class TrainingService {
       include: {
         exercises: {
           omit: {
-            id: true,
             trainingId: true,
             exerciseId: true,
             createdAt: true,

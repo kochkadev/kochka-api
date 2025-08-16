@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -28,7 +21,7 @@ export class SessionController {
   })
   @ApiCreatedResponse({ type: SessionResponse })
   async getOrInitSession(
-    @Param('trainingId', ParseUUIDPipe) trainingId: string,
+    @Param('trainingId') trainingId: string,
     @GetJwtPayload('id') userId: string,
   ): Promise<SessionResponse> {
     return this.sessionService.getOrInitSession(userId, trainingId);

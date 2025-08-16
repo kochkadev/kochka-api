@@ -67,8 +67,9 @@ model TrainingExercise {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  training Training @relation(fields: [trainingId], references: [id])
-  exercise Exercise @relation(fields: [exerciseId], references: [id])
+  training         Training          @relation(fields: [trainingId], references: [id])
+  exercise         Exercise          @relation(fields: [exerciseId], references: [id])
+  sessionExercises SessionExercise[]
 
   @@unique([trainingId, exerciseId])
   @@map("trainingExercise")
@@ -90,15 +91,18 @@ model Session {
 }
 
 model SessionExercise {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionId String   @db.ObjectId
-  set       Float
-  weight    Float?
-  repeats   Float?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId          String   @db.ObjectId
+  trainingExerciseId String   @db.ObjectId
+  set                Int
+  weight             Float?
+  repeats            Float?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  session Session @relation(fields: [sessionId], references: [id])
+  session          Session          @relation(fields: [sessionId], references: [id])
+  trainingExercise TrainingExercise @relation(fields: [trainingExerciseId], references: [id])
 
+  @@unique([sessionId, trainingExerciseId, set])
   @@map("sessionExercise")
 }
